@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        #container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-size: 24px;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        #container.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container" class="show"></div>
+
+    <script>
+        var textArray = ["Перший текст", "Другий текст", "Третій текст"]; // Ваші текстові дані
+
+        var container = document.getElementById("container");
+        var currentIndex = 0;
+
+        var startEvent, endEvent;
+
+        function handleSwipe(start, end) {
+            container.classList.remove("show");
+            setTimeout(function () {
+                if (start > end) {
+                    currentIndex = (currentIndex + 1) % textArray.length;
+                } else if (start < end) {
+                    currentIndex = (currentIndex - 1 + textArray.length) % textArray.length;
+                }
+                container.innerHTML = textArray[currentIndex];
+                container.classList.add("show");
+            }, 500);
+        }
+
+        container.addEventListener('mousedown', function (e) {
+            startEvent = e.clientY || e.touches[0].clientY;
+        }, false);
+
+        container.addEventListener('mouseup', function (e) {
+            endEvent = e.clientY || e.changedTouches[0].clientY;
+            handleSwipe(startEvent, endEvent);
+        }, false);
+
+        // Відображення першого тексту одразу
+        setTimeout(function () {
+            container.innerHTML = textArray[currentIndex];
+        }, 0);
+    </script>
+</body>
+
+</html>
